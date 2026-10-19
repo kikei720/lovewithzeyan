@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>新網站</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; padding:0; }
+    header, footer { background:#333; color:#fff; padding:10px; text-align:center; }
+    nav { display:flex; justify-content:space-around; background:#444; color:#fff; }
+    nav a { padding:10px; color:#fff; text-decoration:none; }
+    section { padding:20px; }
+    .hidden { display:none; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>我的網站</h1>
+  </header>
+
+  <nav>
+    <a href="#" onclick="showPage('chat')">聊天</a>
+    <a href="#" onclick="showPage('mail')">信箱</a>
+    <a href="#" onclick="showPage('moments')">朋友圈</a>
+    <a href="#" onclick="showPage('memory')">紀念</a>
+    <a href="#" onclick="showPage('fortune')">占卜</a>
+    <a href="#" onclick="showPage('stats')">聊天統計</a>
+    <a href="#" onclick="showPage('here')">此間</a>
+    <a href="#" onclick="showPage('cards')">字卡庫</a>
+    <a href="#" onclick="showPage('settings')">設置</a>
+  </nav>
+
+  <section id="chat"> 
+    <h2>聊天</h2>
+    <div id="chatBox"></div>
+    <input type="text" id="chatInput" placeholder="輸入訊息...">
+    <button onclick="sendChat()">送出</button>
+  </section>
+
+  <section id="mail" class="hidden">
+    <h2>信箱</h2>
+    <form>
+      <input type="text" placeholder="收件人"><br>
+      <input type="text" placeholder="主題"><br>
+      <textarea placeholder="內容"></textarea><br>
+      <button>寄出</button>
+    </form>
+  </section>
+
+  <section id="moments" class="hidden">
+    <h2>朋友圈</h2>
+    <textarea placeholder="發佈動態..."></textarea><br>
+    <button>發佈</button>
+    <div id="momentsFeed"></div>
+  </section>
+
+  <section id="memory" class="hidden">
+    <h2>紀念</h2>
+    <textarea placeholder="寫下紀念..."></textarea><br>
+    <button>保存</button>
+  </section>
+
+  <section id="fortune" class="hidden">
+    <h2>占卜</h2>
+    <button onclick="fortune()">開始占卜</button>
+    <div id="fortuneResult"></div>
+  </section>
+
+  <section id="stats" class="hidden">
+    <h2>聊天統計</h2>
+    <div id="statsBox">尚無統計資料</div>
+  </section>
+
+  <section id="here" class="hidden">
+    <h2>此間</h2>
+    <p>這裡可以展示特殊內容或空間。</p>
+  </section>
+
+  <section id="cards" class="hidden">
+    <h2>字卡庫</h2>
+    <input type="file" accept=".doc,.docx" onchange="uploadDoc(event)">
+    <textarea placeholder="手動輸入字卡..."></textarea><br>
+    <button>上載字卡</button><br>
+    <input type="file" accept="image/*" onchange="uploadImage(event)">
+    <div id="cardsBox"></div>
+  </section>
+
+  <section id="settings" class="hidden">
+    <h2>設置</h2>
+    <label>背景顏色: <input type="color" onchange="changeBg(this.value)"></label>
+  </section>
+
+  <footer>
+    <p>© 2026 我的網站</p>
+  </footer>
+
+  <script>
+    function showPage(id){
+      document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+    }
+    function sendChat(){
+      let msg = document.getElementById('chatInput').value;
+      let box = document.getElementById('chatBox');
+      box.innerHTML += "<p>"+msg+"</p>";
+      document.getElementById('chatInput').value="";
+    }
+    function fortune(){
+      let results = ["大吉","中吉","小吉","凶"];
+      let res = results[Math.floor(Math.random()*results.length)];
+      document.getElementById('fortuneResult').innerText = res;
+    }
+    function changeBg(color){
+      document.body.style.background = color;
+    }
+    function uploadDoc(event){
+      let file = event.target.files[0];
+      document.getElementById('cardsBox').innerText = "已上載字卡檔案: "+file.name;
+    }
+    function uploadImage(event){
+      let file = event.target.files[0];
+      let reader = new FileReader();
+      reader.onload = function(e){
+        let img = document.createElement("img");
+        img.src = e.target.result;
+        img.style.maxWidth="200px";
+        document.getElementById('cardsBox').append
